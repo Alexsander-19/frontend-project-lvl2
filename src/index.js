@@ -8,16 +8,20 @@ const genDiff = (firstConfig, secondConfig) => {
   const result = keys.reduce((acc, key) => {
     if (_.has(conf1, key) && _.has(conf2, key)) {
       if (conf1[key] === conf2[key]) {
-        return `${acc}    ${key}: ${conf1[key]}\n`;
+        return { ...acc, [key]: conf1[key] };
       }
-      return `${acc}  - ${key}: ${conf1[key]}\n  + ${key}: ${conf2[key]}\n`;
+      const newKeyAdd = `+ ${key}`;
+      const newKeyRub = `- ${key}`;
+      return { ...acc, [newKeyRub]: conf1[key], [newKeyAdd]: conf2[key] };
     }
     if (_.has(conf1, key)) {
-      return `${acc}  - ${key}: ${conf1[key]}\n`;
+      const newKeyRub = `- ${key}`;
+      return { ...acc, [newKeyRub]: conf1[key] };
     }
-    return `${acc}  + ${key}: ${conf2[key]}\n`;
-  }, '');
-  return `{\n${result}}`;
+    const newKeyAdd = `+ ${key}`;
+    return { ...acc, [newKeyAdd]: conf2[key] };
+  }, {});
+  return JSON.stringify(result);
 };
 
 export default genDiff;
