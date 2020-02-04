@@ -18,7 +18,6 @@ const render = (ast) => {
     }
     return acc;
   }, []);
-  fs.writeFileSync('/home/alex/projects/test/te.json', JSON.stringify(iter(ast)));
   return JSON.stringify(iter(ast));
 };
 
