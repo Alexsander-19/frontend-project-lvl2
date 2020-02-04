@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const render = (ast) => {
   const iter = (items) => items.reduce((acc, item) => {
     if (item.children) {
