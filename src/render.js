@@ -22,7 +22,6 @@ const render = (ast) => {
     }
     return `${acc}${' '.repeat(space2)}${i.name}: ${i.value}\n`;
   }, '');
-  console.log(`{\n${renderIter(ast, 2, 4)}}`);
   return `{\n${renderIter(ast, 2, 4)}}`;
 };
 export default render;
