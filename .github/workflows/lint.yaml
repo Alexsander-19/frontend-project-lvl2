@@ -1,4 +1,4 @@
-name: Jest Test
+name: ESLint
 
 on: [push]
 
