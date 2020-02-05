@@ -1,8 +1,13 @@
 name: Jest Test
-on: push
+
+on: [push]
+
 jobs:
-  test:
+  testing:
+
+    runs-on: ubuntu-latest
+
     steps:
-      name: Jest Snapshots
+    - name: Jest Snapshots
       uses: gimenete/github-jest-snapshots@1.0
-      run: make test
+    - run: make test

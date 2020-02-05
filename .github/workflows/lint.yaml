@@ -1,6 +1,13 @@
-name: ESLint Action
-uses: hallee/eslint-action@1.0.1
-on: push
+name: Jest Test
+
+on: [push]
+
 jobs:
-  lint:
-    run: make lint
+  linting:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ESLint Action
+      uses: hallee/eslint-action@1.0.1
+    - run: make lint
