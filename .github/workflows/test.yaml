@@ -1,3 +1,4 @@
 - name: Jest Snapshots
   uses: gimenete/github-jest-snapshots@1.0
   on: push
+  run: make test
