@@ -3,4 +3,4 @@ uses: hallee/eslint-action@1.0.1
 on: push
 jobs:
   lint:
-    - run: make lint
+    run: make lint
