@@ -1,7 +1,8 @@
-name: Jest Snapshots
-uses: gimenete/github-jest-snapshots@1.0
+name: Jest Test
 on: push
 jobs:
   test:
     steps:
+      name: Jest Snapshots
+      uses: gimenete/github-jest-snapshots@1.0
       run: make test
