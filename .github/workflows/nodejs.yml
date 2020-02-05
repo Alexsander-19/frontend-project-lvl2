@@ -17,8 +17,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm run build --if-present
-    - run: npm test
+    - name: Jest Snapshots
+      uses: gimenete/github-jest-snapshots@1.0
+    - run: make install
+    - run: make build
+    - run: make test
       env:
         CI: true
