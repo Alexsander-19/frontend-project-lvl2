@@ -1,4 +1,4 @@
-import parser from './parsers';
+import parser from './parser';
 import render from './formatters';
 
 const _ = require('lodash');

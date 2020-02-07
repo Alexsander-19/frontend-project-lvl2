@@ -13,22 +13,34 @@ const getKeys = (o) => {
     return [...acc, i];
   }, keys);
 };
-const parser = (firstPath, secondPath) => {
+
+const getConfig = (firstPath, secondPath) => {
   const firstType = path.extname(firstPath);
   const secondType = path.extname(secondPath);
   const correctType = firstType === secondType ? firstType : false;
-  let firstConfig;
-  let secondConfig;
   if (correctType === '.json') {
-    firstConfig = JSON.parse(fs.readFileSync(firstPath, 'UTF8'));
-    secondConfig = JSON.parse(fs.readFileSync(secondPath, 'UTF8'));
-  } else if (correctType === '.yaml') {
-    firstConfig = yaml.safeLoad(fs.readFileSync(firstPath, 'UTF8'));
-    secondConfig = yaml.safeLoad(fs.readFileSync(secondPath, 'UTF8'));
-  } else if (correctType === '.ini') {
-    firstConfig = ini.parse(fs.readFileSync(firstPath, 'UTF8'));
-    secondConfig = ini.parse(fs.readFileSync(secondPath, 'UTF8'));
+    return [
+      JSON.parse(fs.readFileSync(firstPath, 'UTF8')),
+      JSON.parse(fs.readFileSync(secondPath, 'UTF8')),
+    ];
   }
+  if (correctType === '.yaml') {
+    return [
+      yaml.safeLoad(fs.readFileSync(firstPath, 'UTF8')),
+      yaml.safeLoad(fs.readFileSync(secondPath, 'UTF8')),
+    ];
+  }
+  if (correctType === '.ini') {
+    return [
+      ini.parse(fs.readFileSync(firstPath, 'UTF8')),
+      ini.parse(fs.readFileSync(secondPath, 'UTF8')),
+    ];
+  }
+  return null;
+};
+
+const parser = (firstPath, secondPath) => {
+  const [firstConfig, secondConfig] = getConfig(firstPath, secondPath);
   const keys = Array.from(new Set([
     ..._.flattenDeep(getKeys(firstConfig)),
     ..._.flattenDeep(getKeys(secondConfig)),
