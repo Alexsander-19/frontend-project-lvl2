@@ -1,14 +1,25 @@
-install:
-	npm install
+install: install-deps
+
+run:
+	npx babel-node 'src/bin/hexlet.js' 10
+
+install-deps:
+	npm ci
+
 build:
 	rm -rf dist
 	npm run build
-publish:
-	npm publish --dry-run
-lint:
-	npx eslint .
+
 test:
-	npm run test
+	npm test
+
 test-coverage:
 	npm test -- --coverage
+
+lint:
+	npx eslint .
+
+publish:
+	npm publish --dry-run
+
 .PHONY: test
