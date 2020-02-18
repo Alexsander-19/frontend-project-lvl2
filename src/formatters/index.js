@@ -1,6 +1,6 @@
 import tree from './tree';
 import plain from './plain';
-import formatJSON from './json';
+import json from './json';
 
 const render = (ast, format) => {
   if (format === 'tree') {
@@ -10,7 +10,7 @@ const render = (ast, format) => {
     return plain(ast);
   }
   if (format === 'json') {
-    return formatJSON(ast);
+    return json(ast);
   }
   return null;
 };
