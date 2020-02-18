@@ -11,3 +11,5 @@ test:
 	npm run test
 testWatch:
 	npm run test-watch
+test-coverage:
+	npm test -- --coverage
