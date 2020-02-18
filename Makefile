@@ -9,7 +9,6 @@ lint:
 	npx eslint .
 test:
 	npm run test
-testWatch:
-	npm run test-watch
 test-coverage:
-	npm test --coverage
+	npm test -- --coverage
+.PHONY: test
