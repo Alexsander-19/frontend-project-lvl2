@@ -23,7 +23,7 @@ const plain = (ast) => {
     }
     return acc;
   }, '');
-  return iter(ast, '');
+  return iter(ast, '').trim();
 };
 
 export default plain;

@@ -1,7 +1,6 @@
+import _ from 'lodash';
 import parser from './parser';
 import render from './formatters';
-
-const _ = require('lodash');
 
 const genDiff = (firstPath, secondPath, format) => {
   const { firstConfig, secondConfig, keys } = parser(firstPath, secondPath);

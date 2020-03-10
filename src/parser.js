@@ -1,17 +1,17 @@
-const fs = require('fs');
-const yaml = require('js-yaml');
-const path = require('path');
-const ini = require('ini');
-const _ = require('lodash');
+import fs from 'fs';
+import yaml from 'js-yaml';
+import path from 'path';
+import ini from 'ini';
+
 
 const getKeys = (o) => {
   const keys = Object.keys(o);
   return keys.reduce((acc, i) => {
     if (typeof o[i] === 'object') {
-      return [...acc, getKeys(o[i])];
+      return [...acc, i, ...getKeys(o[i])];
     }
     return [...acc, i];
-  }, keys);
+  }, []);
 };
 
 const getConfig = (firstPath, secondPath) => {
@@ -42,8 +42,8 @@ const getConfig = (firstPath, secondPath) => {
 const parser = (firstPath, secondPath) => {
   const [firstConfig, secondConfig] = getConfig(firstPath, secondPath);
   const keys = Array.from(new Set([
-    ..._.flattenDeep(getKeys(firstConfig)),
-    ..._.flattenDeep(getKeys(secondConfig)),
+    ...getKeys(firstConfig),
+    ...getKeys(secondConfig),
   ]));
   return { firstConfig, secondConfig, keys };
 };
