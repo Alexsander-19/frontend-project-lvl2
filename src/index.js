@@ -8,12 +8,12 @@ const genDiff = (firstPath, secondPath, format) => {
     if (_.has(ob1, i) && _.has(ob2, i)) {
       if (ob1[i] instanceof Object && ob2[i] instanceof Object) {
         const conf = {
-          name: i, status: '', value: '', children: getAST(ob1[i], ob2[i]),
+          name: i, status: 'parent', value: '', children: getAST(ob1[i], ob2[i]),
         };
         return [...acc, conf];
       }
       if (ob1[i] === ob2[i]) {
-        const conf = { name: i, status: '', value: ob1[i] };
+        const conf = { name: i, status: 'unchanged', value: ob1[i] };
         return [...acc, conf];
       }
       const upd = {

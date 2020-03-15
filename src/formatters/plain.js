@@ -1,6 +1,6 @@
 const plain = (ast) => {
   const iter = (items, ac) => items.reduce((acc, i) => {
-    if (i.children) {
+    if (i.status === 'parent') {
       return `${acc}${iter(i.children, `${ac}${i.name}.`)}`;
     }
     if (i.status === 'updated') {
