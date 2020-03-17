@@ -31,7 +31,7 @@ const genDiff = (firstPath, secondPath, format) => {
     }
     return acc;
   }, []);
-  const ast = iter(firstConfig, secondConfig)
+  const ast = iter(firstConfig, secondConfig);
   return render(ast, format);
 };
 

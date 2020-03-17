@@ -15,7 +15,7 @@ const readFile = (filePath) => {
     return ini.parse(fs.readFileSync(filePath, 'UTF8'));
   }
   return null;
-}
+};
 
 const getKeys = (obj) => {
   const keys = Object.keys(obj);
@@ -29,10 +29,10 @@ const getKeys = (obj) => {
 
 const parser = (firstPath, secondPath) => {
   const firstConfig = readFile(firstPath);
-  const secondConfig =readFile(secondPath);
+  const secondConfig = readFile(secondPath);
   const keys = Array.from(new Set([
     ...getKeys(firstConfig),
-    ...getKeys(secondConfig)
+    ...getKeys(secondConfig),
   ]));
   return { firstConfig, secondConfig, keys };
 };
