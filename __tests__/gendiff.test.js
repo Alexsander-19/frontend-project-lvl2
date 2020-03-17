@@ -17,17 +17,29 @@ const templates = [
   ],
 ];
 
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'UTF-8');
+const getFixturePath = (fileName) => path.join(__dirname, '..', '__fixtures__', fileName);
+const readFile = (fileName) => fs.readFileSync(getFixturePath(fileName), 'UTF-8');
 
-test.each(templates)('compare config, result format - json', (firstPath, secondPath) => {
-  expect(genDiff(getFixturePath(firstPath), getFixturePath(secondPath), 'json')).toEqual(readFile('result-json.txt'));
+test.each(templates)('compare config, result format - json', (fileName1, fileName2) => {
+  const fullPath1 = getFixturePath(fileName1);
+  const fullPath2 = getFixturePath(fileName2);
+  const expectedValue = readFile('result-json.txt');
+  const actualValue = genDiff(fullPath1, fullPath2, 'json');
+  expect(actualValue).toEqual(expectedValue);
 });
 
-test.each(templates)('compare config, result format - plain', (firstPath, secondPath) => {
-  expect(genDiff(getFixturePath(firstPath), getFixturePath(secondPath), 'plain')).toEqual(readFile('result-plain.txt'));
+test.each(templates)('compare config, result format - plain', (fileName1, fileName2) => {
+  const fullPath1 = getFixturePath(fileName1);
+  const fullPath2 = getFixturePath(fileName2);
+  const expectedValue = readFile('result-plain.txt');
+  const actualValue = genDiff(fullPath1, fullPath2, 'plain');
+  expect(actualValue).toEqual(expectedValue);
 });
 
-test.each(templates)('compare config, result format - tree', (firstPath, secondPath) => {
-  expect(genDiff(getFixturePath(firstPath), getFixturePath(secondPath), 'tree')).toEqual(readFile('result-tree.txt'));
+test.each(templates)('compare config, result format - tree', (fileName1, fileName2) => {
+  const fullPath1 = getFixturePath(fileName1);
+  const fullPath2 = getFixturePath(fileName2);
+  const expectedValue = readFile('result-tree.txt');
+  const actualValue = genDiff(fullPath1, fullPath2, 'tree');
+  expect(actualValue).toEqual(expectedValue);
 });

@@ -16,7 +16,8 @@ const render = (ast) => {
     }
     return acc;
   }, []);
-  return JSON.stringify(iter(ast));
+  const result = iter(ast);
+  return JSON.stringify(result);
 };
 
 export default render;

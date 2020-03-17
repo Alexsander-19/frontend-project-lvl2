@@ -3,47 +3,36 @@ import yaml from 'js-yaml';
 import path from 'path';
 import ini from 'ini';
 
+const readFile = (filePath) => {
+  const fileType = path.extname(filePath);
+  if (fileType === '.json') {
+    return JSON.parse(fs.readFileSync(filePath, 'UTF8'));
+  }
+  if (fileType === '.yaml') {
+    return yaml.safeLoad(fs.readFileSync(filePath, 'UTF8'));
+  }
+  if (fileType === '.ini') {
+    return ini.parse(fs.readFileSync(filePath, 'UTF8'));
+  }
+  return null;
+}
 
-const getKeys = (o) => {
-  const keys = Object.keys(o);
+const getKeys = (obj) => {
+  const keys = Object.keys(obj);
   return keys.reduce((acc, i) => {
-    if (typeof o[i] === 'object') {
-      return [...acc, i, ...getKeys(o[i])];
+    if (obj[i] instanceof Object) {
+      return [...acc, i, ...getKeys(obj[i])];
     }
     return [...acc, i];
   }, []);
 };
 
-const getConfig = (firstPath, secondPath) => {
-  const firstType = path.extname(firstPath);
-  const secondType = path.extname(secondPath);
-  const correctType = firstType === secondType ? firstType : false;
-  if (correctType === '.json') {
-    return [
-      JSON.parse(fs.readFileSync(firstPath, 'UTF8')),
-      JSON.parse(fs.readFileSync(secondPath, 'UTF8')),
-    ];
-  }
-  if (correctType === '.yaml') {
-    return [
-      yaml.safeLoad(fs.readFileSync(firstPath, 'UTF8')),
-      yaml.safeLoad(fs.readFileSync(secondPath, 'UTF8')),
-    ];
-  }
-  if (correctType === '.ini') {
-    return [
-      ini.parse(fs.readFileSync(firstPath, 'UTF8')),
-      ini.parse(fs.readFileSync(secondPath, 'UTF8')),
-    ];
-  }
-  return null;
-};
-
 const parser = (firstPath, secondPath) => {
-  const [firstConfig, secondConfig] = getConfig(firstPath, secondPath);
+  const firstConfig = readFile(firstPath);
+  const secondConfig =readFile(secondPath);
   const keys = Array.from(new Set([
     ...getKeys(firstConfig),
-    ...getKeys(secondConfig),
+    ...getKeys(secondConfig)
   ]));
   return { firstConfig, secondConfig, keys };
 };

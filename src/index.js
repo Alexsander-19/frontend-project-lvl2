@@ -4,34 +4,35 @@ import render from './formatters';
 
 const genDiff = (firstPath, secondPath, format) => {
   const { firstConfig, secondConfig, keys } = parser(firstPath, secondPath);
-  const getAST = (ob1, ob2) => keys.reduce((acc, i) => {
-    if (_.has(ob1, i) && _.has(ob2, i)) {
-      if (ob1[i] instanceof Object && ob2[i] instanceof Object) {
-        const conf = {
-          name: i, status: 'parent', value: '', children: getAST(ob1[i], ob2[i]),
+  const iter = (obj1, obj2) => keys.reduce((acc, key) => {
+    if (_.has(obj1, key) && _.has(obj2, key)) {
+      if (obj1[key] instanceof Object && obj2[key] instanceof Object) {
+        const parent = {
+          name: key, status: 'parent', value: '', children: iter(obj1[key], obj2[key]),
         };
-        return [...acc, conf];
+        return [...acc, parent];
       }
-      if (ob1[i] === ob2[i]) {
-        const conf = { name: i, status: 'unchanged', value: ob1[i] };
-        return [...acc, conf];
+      if (obj1[key] === obj2[key]) {
+        const unchangedValue = { name: key, status: 'unchanged', value: obj1[key] };
+        return [...acc, unchangedValue];
       }
-      const upd = {
-        name: i, status: 'updated', value: [ob1[i], ob2[i]],
+      const updatedValue = {
+        name: key, status: 'updated', value: [obj1[key], obj2[key]],
       };
-      return [...acc, upd];
+      return [...acc, updatedValue];
     }
-    if (_.has(ob1, i)) {
-      const addConf = { name: i, status: 'remove', value: ob1[i] };
-      return [...acc, addConf];
+    if (_.has(obj1, key)) {
+      const removeValue = { name: key, status: 'remove', value: obj1[key] };
+      return [...acc, removeValue];
     }
-    if (_.has(ob2, i)) {
-      const remConf = { name: i, status: 'add', value: ob2[i] };
-      return [...acc, remConf];
+    if (_.has(obj2, key)) {
+      const addValue = { name: key, status: 'add', value: obj2[key] };
+      return [...acc, addValue];
     }
     return acc;
   }, []);
-  return render(getAST(firstConfig, secondConfig), format);
+  const ast = iter(firstConfig, secondConfig)
+  return render(ast, format);
 };
 
 export default genDiff;
