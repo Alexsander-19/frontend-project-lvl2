@@ -1,29 +1,33 @@
+import { isObject } from 'lodash';
+
 const plain = (ast) => {
-  const iter = (items, ac) => items.reduce((acc, i) => {
-    if (i.status === 'parent') {
-      return `${acc}${iter(i.children, `${ac}${i.name}.`)}`;
+  const iter = (items, ac, acc) => {
+    const [first, ...rest] = items;
+    if (!first) {
+      return acc;
     }
-    if (i.status === 'updated') {
-      if (i.value[0] instanceof Object) {
-        return `${acc}Property ${ac}${i.name} was updated. From [complex value] to ${i.value[1]}\n`;
-      }
-      if (i.value[1] instanceof Object) {
-        return `${acc}Property ${ac}${i.name} was updated. From ${i.value[0]} to [complex value]\n`;
-      }
-      return `${acc}Property ${ac}${i.name} was updated. From ${i.value[0]} to ${i.value[1]}\n`;
+    if (first.status === 'parent') {
+      const newACC = iter(first.children, `${ac}${first.name}.`, acc);
+      return iter(rest, ac, newACC);
     }
-    if (i.status === 'add') {
-      if (i.value instanceof Object) {
-        return `${acc}Property ${ac}${i.name} was added with value: [complex value]\n`;
-      }
-      return `${acc}Property ${ac}${i.name} was added with value: ${i.value}\n`;
+    if (first.status === 'updated') {
+      const value1 = isObject(first.value[0]) ? '[complex value]' : first.value[0];
+      const value2 = isObject(first.value[1]) ? '[complex value]' : first.value[1];
+      const newACC = [...acc, `Property ${ac}${first.name} was updated. From ${value1} to ${value2}`];
+      return iter(rest, ac, newACC);
     }
-    if (i.status === 'remove') {
-      return `${acc}Property ${ac}${i.name} was removed\n`;
+    if (first.status === 'add') {
+      const value = isObject(first.value) ? '[complex value]' : first.value;
+      const newACC = [...acc, `Property ${ac}${first.name} was added with value: ${value}`];
+      return iter(rest, ac, newACC);
     }
-    return acc;
-  }, '');
-  return iter(ast, '').trim();
+    if (first.status === 'remove') {
+      const newACC = [...acc, `Property ${ac}${first.name} was removed`];
+      return iter(rest, ac, newACC);
+    }
+    return iter(rest, ac, acc);
+  };
+  return iter(ast, '', []).join('\n');
 };
 
 export default plain;

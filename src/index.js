@@ -6,7 +6,7 @@ import buildAST from './buildAST';
 import render from './formatters';
 
 const getFileType = (filePath) => {
-  const fileType = path.extname(filePath);
+  const fileType = path.extname(filePath).slice(1);
   return fileType;
 };
 
@@ -17,15 +17,15 @@ const readFile = (filePath) => {
 };
 
 const genDiff = (firstPath, secondPath, format) => {
-  const data1 = readFile(firstPath);
-  const data2 = readFile(secondPath);
-  const processedData = [
-    parse(data1, getFileType(firstPath)),
-    parse(data2, getFileType(secondPath)),
-  ];
-  const ast = buildAST(processedData);
-  const diffData = render(ast, format);
-  return diffData;
+  const firstConfigData = readFile(firstPath);
+  const seconfConfigData = readFile(secondPath);
+  const firstConfigType = getFileType(firstPath);
+  const secondConfigType = getFileType(secondPath);
+  const parsedFirstConfig = parse(firstConfigData, firstConfigType);
+  const parsedSecondConfig = parse(seconfConfigData, secondConfigType);
+  const ast = buildAST(parsedFirstConfig, parsedSecondConfig);
+  const diffConfig = render(ast, format);
+  return diffConfig;
 };
 
 export default genDiff;
