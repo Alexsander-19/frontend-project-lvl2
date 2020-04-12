@@ -1,12 +1,14 @@
 import _ from 'lodash';
 
+const buildNode = (name, status, value = '', children = []) => (
+  {
+    name,
+    status,
+    value,
+    children,
+  });
+
 const buildAST = (firstConfig, secondConfig) => {
-  const buildNode = (name, status, value = '', children = []) => {
-    const result = {
-      name, status, value, children,
-    };
-    return result;
-  };
   const iter = (obj1, obj2) => {
     const keys = _.union(_.keys(obj1), _.keys(obj2));
     return keys.map((key) => {
@@ -25,8 +27,7 @@ const buildAST = (firstConfig, secondConfig) => {
       return buildNode(key, 'add', obj2[key]);
     });
   };
-  const ast = iter(firstConfig, secondConfig);
-  return ast;
+  return iter(firstConfig, secondConfig);
 };
 
 export default buildAST;

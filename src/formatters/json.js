@@ -1,6 +1,3 @@
-const render = (ast) => {
-  const jsonStr = JSON.stringify(ast);
-  return jsonStr;
-};
+const render = (ast) => JSON.stringify(ast);
 
 export default render;

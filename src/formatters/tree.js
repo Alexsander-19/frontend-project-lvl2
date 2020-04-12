@@ -28,7 +28,6 @@ const render = (ast) => {
     }
     return `${acc}${' '.repeat(space)}${i.name}: ${i.value}\n`;
   }, '');
-  const result = `{\n${iter(ast, 4)}}`;
-  return result;
+  return `{\n${iter(ast, 4)}}`;
 };
 export default render;
