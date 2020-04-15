@@ -20,7 +20,7 @@ const templates = [
 const getFixturePath = (fileName) => path.join(__dirname, '..', '__fixtures__', fileName);
 const readFile = (fileName) => fs.readFileSync(getFixturePath(fileName), 'UTF-8');
 
-test.each(templates)('compare config, result format - json', (fileName1, fileName2) => {
+test.each(templates)('compare config, output format - json', (fileName1, fileName2) => {
   const fullPath1 = getFixturePath(fileName1);
   const fullPath2 = getFixturePath(fileName2);
   const expectedValue = readFile('result-json.txt');
@@ -28,7 +28,7 @@ test.each(templates)('compare config, result format - json', (fileName1, fileNam
   expect(actualValue).toEqual(expectedValue);
 });
 
-test.each(templates)('compare config, result format - plain', (fileName1, fileName2) => {
+test.each(templates)('compare config, output format - plain', (fileName1, fileName2) => {
   const fullPath1 = getFixturePath(fileName1);
   const fullPath2 = getFixturePath(fileName2);
   const expectedValue = readFile('result-plain.txt');
@@ -36,7 +36,7 @@ test.each(templates)('compare config, result format - plain', (fileName1, fileNa
   expect(actualValue).toEqual(expectedValue);
 });
 
-test.each(templates)('compare config, result format - tree', (fileName1, fileName2) => {
+test.each(templates)('compare config, output format - tree', (fileName1, fileName2) => {
   const fullPath1 = getFixturePath(fileName1);
   const fullPath2 = getFixturePath(fileName2);
   const expectedValue = readFile('result-tree.txt');
