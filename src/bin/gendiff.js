@@ -10,6 +10,10 @@ program
   .arguments('<firstConfig> <secondConfig>')
   .parse(process.argv)
   .action((firstConfig, secondConfig) => {
-    console.log(genDiff(firstConfig, secondConfig, program.format));
+    try {
+      console.log(genDiff(firstConfig, secondConfig, program.format));
+    } catch (err) {
+      console.log(err.name, err.message);
+    }
   })
   .parse(process.argv);

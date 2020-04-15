@@ -1,33 +1,34 @@
-import { isObject } from 'lodash';
+import { isObject, flattenDeep } from 'lodash';
+
+const buildValue = (obj) => {
+  if (!isObject(obj)) {
+    return obj;
+  }
+  return '[complex value]';
+};
 
 const plain = (ast) => {
-  const iter = (items, ac, acc) => {
-    const [first, ...rest] = items;
-    if (!first) {
-      return acc;
+  const iter = (items, acc) => items.map((i) => {
+    const { status, children, name } = i;
+    const currentValue = buildValue(i.value.currentValue);
+    const lostValue = buildValue(i.value.lostValue);
+    const newACC = `${acc}${name}.`;
+    switch (status) {
+      case 'parent':
+        return iter(children, newACC);
+      case 'updated':
+        return `Property ${acc}${name} was updated. From ${lostValue} to ${currentValue}`;
+      case 'added':
+        return `Property ${acc}${name} was added with value: ${currentValue}`;
+      case 'removed':
+        return `Property ${acc}${name} was removed`;
+      default:
+        return null;
     }
-    if (first.status === 'parent') {
-      const newACC = iter(first.children, `${ac}${first.name}.`, acc);
-      return iter(rest, ac, newACC);
-    }
-    if (first.status === 'updated') {
-      const value1 = isObject(first.value[0]) ? '[complex value]' : first.value[0];
-      const value2 = isObject(first.value[1]) ? '[complex value]' : first.value[1];
-      const newACC = [...acc, `Property ${ac}${first.name} was updated. From ${value1} to ${value2}`];
-      return iter(rest, ac, newACC);
-    }
-    if (first.status === 'add') {
-      const value = isObject(first.value) ? '[complex value]' : first.value;
-      const newACC = [...acc, `Property ${ac}${first.name} was added with value: ${value}`];
-      return iter(rest, ac, newACC);
-    }
-    if (first.status === 'remove') {
-      const newACC = [...acc, `Property ${ac}${first.name} was removed`];
-      return iter(rest, ac, newACC);
-    }
-    return iter(rest, ac, acc);
-  };
-  return iter(ast, '', []).join('\n');
+  });
+  const result = flattenDeep(iter(ast, ''));
+  const removedNull = result.filter((i) => i !== null);
+  return removedNull.join('\n');
 };
 
 export default plain;

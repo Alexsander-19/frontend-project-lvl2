@@ -1,33 +1,37 @@
-import { isObject } from 'lodash';
+import { isObject, flattenDeep } from 'lodash';
 
-const getValue = (obj, space) => {
-  if (isObject(obj)) {
-    const keys = Object.keys(obj);
-    const value = keys.map((key) => `${' '.repeat(space + 4)}${key}: ${obj[key]}\n`);
-    return `{\n${value.join('')}${' '.repeat(space)}}`;
+const buildValue = (obj, space) => {
+  if (!isObject(obj)) {
+    return obj;
   }
-  return obj;
+  const keys = Object.keys(obj);
+  const value = keys.map((key) => `${' '.repeat(space + 4)}${key}: ${obj[key]}\n`);
+  return `{\n${value.join('')}${' '.repeat(space)}}`;
 };
 
 const render = (ast) => {
-  const iter = (items, space) => items.reduce((acc, i) => {
-    if (i.status === 'parent') {
-      const children = iter(i.children, space + 4);
-      return `${acc}${' '.repeat(space)}${i.name}: {\n${children}${' '.repeat(space)}}\n`;
+  const iter = (items, space) => items.map((i) => {
+    const { status, name, children } = i;
+    const currentValue = buildValue(i.value.currentValue, space);
+    const lostValue = buildValue(i.value.lostValue, space);
+    const removed = `${' '.repeat(space - 2)}- ${name}: ${lostValue}`;
+    const added = `${' '.repeat(space - 2)}+ ${name}: ${currentValue}`;
+    const unchanged = `${' '.repeat(space)}${name}: ${currentValue}`;
+    switch (status) {
+      case 'parent':
+        return [`${' '.repeat(space)}${name}: {`, iter(children, space + 4), `${' '.repeat(space)}}`];
+      case 'updated':
+        return [added, removed];
+      case 'added':
+        return added;
+      case 'removed':
+        return removed;
+      default:
+        return unchanged;
     }
-    if (i.status === 'updated') {
-      const remove = `${' '.repeat(space - 2)}- ${i.name}: ${getValue(i.value[0], space)}\n`;
-      const add = `${' '.repeat(space - 2)}+ ${i.name}: ${getValue(i.value[1], space)}\n`;
-      return `${acc}${remove}${add}`;
-    }
-    if (i.status === 'add') {
-      return `${acc}${' '.repeat(space - 2)}+ ${i.name}: ${getValue(i.value, space)}\n`;
-    }
-    if (i.status === 'remove') {
-      return `${acc}${' '.repeat(space - 2)}- ${i.name}: ${getValue(i.value, space)}\n`;
-    }
-    return `${acc}${' '.repeat(space)}${i.name}: ${i.value}\n`;
-  }, '');
-  return `{\n${iter(ast, 4)}}`;
+  });
+  const result = flattenDeep(iter(ast, 4));
+  return `{\n${result.join('\n')}\n}`;
 };
+
 export default render;

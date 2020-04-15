@@ -11,7 +11,7 @@ const render = (ast, format) => {
     case 'json':
       return json(ast);
     default:
-      return null;
+      throw new TypeError(`unknow output format - '${format}'`);
   }
 };
 

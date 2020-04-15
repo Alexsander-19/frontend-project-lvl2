@@ -1,8 +1,8 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parse = (data, typeFile) => {
-  switch (typeFile) {
+const parse = (data, dataType) => {
+  switch (dataType) {
     case 'json':
       return JSON.parse(data);
     case 'yaml':
@@ -10,7 +10,7 @@ const parse = (data, typeFile) => {
     case 'ini':
       return ini.parse(data);
     default:
-      return null;
+      throw new TypeError(`unknown data type - '${dataType}'`);
   }
 };
 

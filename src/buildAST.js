@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const buildNode = (name, status, value = '', children = []) => (
+const buildNode = (name, status, value, children = null) => (
   {
     name,
     status,
@@ -14,17 +14,17 @@ const buildAST = (firstConfig, secondConfig) => {
     return keys.map((key) => {
       if (_.has(obj1, key) && _.has(obj2, key)) {
         if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-          return buildNode(key, 'parent', '', iter(obj1[key], obj2[key]));
+          return buildNode(key, 'parent', {}, iter(obj1[key], obj2[key]));
         }
         if (obj1[key] === obj2[key]) {
-          return buildNode(key, 'unchanged', obj1[key]);
+          return buildNode(key, 'unchanged', { currentValue: obj2[key] });
         }
-        return buildNode(key, 'updated', [obj1[key], obj2[key]]);
+        return buildNode(key, 'updated', { currentValue: obj2[key], lostValue: obj1[key] });
       }
       if (_.has(obj1, key)) {
-        return buildNode(key, 'remove', obj1[key]);
+        return buildNode(key, 'removed', { lostValue: obj1[key] });
       }
-      return buildNode(key, 'add', obj2[key]);
+      return buildNode(key, 'added', { currentValue: obj2[key] });
     });
   };
   return iter(firstConfig, secondConfig);
