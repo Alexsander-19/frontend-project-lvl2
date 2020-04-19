@@ -29,7 +29,7 @@
 ### supported files
 * json
 * yaml
-* json
+* ini
 
 ## Demonstration
 
