@@ -10,13 +10,13 @@ const buildValue = (obj, space) => {
 };
 
 const render = (ast) => {
-  const iter = (items, space) => items.map((i) => {
-    const { status, name, children } = i;
-    const currentValue = buildValue(i.value.currentValue, space);
-    const lostValue = buildValue(i.value.lostValue, space);
-    const removed = `${' '.repeat(space - 2)}- ${name}: ${lostValue}`;
-    const added = `${' '.repeat(space - 2)}+ ${name}: ${currentValue}`;
-    const unchanged = `${' '.repeat(space)}${name}: ${currentValue}`;
+  const iter = (tree, space) => tree.map((node) => {
+    const { status, name, children } = node;
+    const beginValue = buildValue(node.value.beginValue, space);
+    const endValue = buildValue(node.value.endValue, space);
+    const removed = `${' '.repeat(space - 2)}- ${name}: ${endValue}`;
+    const added = `${' '.repeat(space - 2)}+ ${name}: ${beginValue}`;
+    const unchanged = `${' '.repeat(space)}${name}: ${beginValue}`;
     switch (status) {
       case 'parent':
         return [`${' '.repeat(space)}${name}: {`, iter(children, space + 4), `${' '.repeat(space)}}`];
@@ -26,8 +26,10 @@ const render = (ast) => {
         return added;
       case 'removed':
         return removed;
-      default:
+      case 'unchanged':
         return unchanged;
+      default:
+        throw new Error(`unexpected status - ${status}`);
     }
   });
   const result = flattenDeep(iter(ast, 4));

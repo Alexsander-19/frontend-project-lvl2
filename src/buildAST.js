@@ -17,14 +17,14 @@ const buildAST = (firstConfig, secondConfig) => {
           return buildNode(key, 'parent', {}, iter(obj1[key], obj2[key]));
         }
         if (obj1[key] === obj2[key]) {
-          return buildNode(key, 'unchanged', { currentValue: obj2[key] });
+          return buildNode(key, 'unchanged', { beginValue: obj2[key] });
         }
-        return buildNode(key, 'updated', { currentValue: obj2[key], lostValue: obj1[key] });
+        return buildNode(key, 'updated', { beginValue: obj2[key], endValue: obj1[key] });
       }
       if (_.has(obj1, key)) {
-        return buildNode(key, 'removed', { lostValue: obj1[key] });
+        return buildNode(key, 'removed', { endValue: obj1[key] });
       }
-      return buildNode(key, 'added', { currentValue: obj2[key] });
+      return buildNode(key, 'added', { beginValue: obj2[key] });
     });
   };
   return iter(firstConfig, secondConfig);

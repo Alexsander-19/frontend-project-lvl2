@@ -8,27 +8,29 @@ const buildValue = (obj) => {
 };
 
 const plain = (ast) => {
-  const iter = (items, acc) => items.map((i) => {
-    const { status, children, name } = i;
-    const currentValue = buildValue(i.value.currentValue);
-    const lostValue = buildValue(i.value.lostValue);
+  const iter = (tree, acc) => tree.map((node) => {
+    const { status, children, name } = node;
+    const beginValue = buildValue(node.value.beginValue);
+    const endValue = buildValue(node.value.endValue);
     const newACC = `${acc}${name}.`;
     switch (status) {
       case 'parent':
         return iter(children, newACC);
       case 'updated':
-        return `Property ${acc}${name} was updated. From ${lostValue} to ${currentValue}`;
+        return `Property ${acc}${name} was updated. From ${endValue} to ${beginValue}`;
       case 'added':
-        return `Property ${acc}${name} was added with value: ${currentValue}`;
+        return `Property ${acc}${name} was added with value: ${beginValue}`;
       case 'removed':
         return `Property ${acc}${name} was removed`;
+      case 'unchanged':
+        return '';
       default:
-        return null;
+        throw new Error(`unexpected status - ${status}`);
     }
   });
   const result = flattenDeep(iter(ast, ''));
-  const removedNull = result.filter((i) => i !== null);
-  return removedNull.join('\n');
+  const removedEmptyString = result.filter((i) => i !== '');
+  return removedEmptyString.join('\n');
 };
 
 export default plain;
