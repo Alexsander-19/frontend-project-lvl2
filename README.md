@@ -33,4 +33,4 @@
 
 ## asciinema demonstration
 
-[![asciicast](https://asciinema.org/a/XRxeeGr928sreZVERcUxmqMWt.svg)](https://asciinema.org/a/XRxeeGr928sreZVERcUxmqMWt)
+[![asciicast](https://asciinema.org/a/CJCTygdMiIh0osdb7Y3hGWNKt.svg)](https://asciinema.org/a/CJCTygdMiIh0osdb7Y3hGWNKt)
