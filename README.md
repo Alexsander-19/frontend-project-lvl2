@@ -10,11 +10,11 @@
 
 ```make install```
 
-* create pacage
+* build
 
 ```make publish```
 
-* install pacage
+* install
 
 ```sudo npm link```
 
