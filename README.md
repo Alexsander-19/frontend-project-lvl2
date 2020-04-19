@@ -31,6 +31,6 @@
 * yaml
 * json
 
-## asciinema demonstration
+## Demonstration
 
 [![asciicast](https://asciinema.org/a/CJCTygdMiIh0osdb7Y3hGWNKt.svg)](https://asciinema.org/a/CJCTygdMiIh0osdb7Y3hGWNKt)
