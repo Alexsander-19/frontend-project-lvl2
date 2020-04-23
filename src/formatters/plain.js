@@ -10,16 +10,16 @@ const buildValue = (obj) => {
 const plain = (ast) => {
   const iter = (tree, acc) => tree.map((node) => {
     const { status, children, name } = node;
-    const beginValue = buildValue(node.value.beginValue);
-    const endValue = buildValue(node.value.endValue);
+    const newValue = buildValue(node.value.newValue);
+    const oldValue = buildValue(node.value.oldValue);
     const newACC = `${acc}${name}.`;
     switch (status) {
       case 'parent':
         return iter(children, newACC);
       case 'updated':
-        return `Property ${acc}${name} was updated. From ${endValue} to ${beginValue}`;
+        return `Property ${acc}${name} was updated. From ${oldValue} to ${newValue}`;
       case 'added':
-        return `Property ${acc}${name} was added with value: ${beginValue}`;
+        return `Property ${acc}${name} was added with value: ${newValue}`;
       case 'removed':
         return `Property ${acc}${name} was removed`;
       case 'unchanged':

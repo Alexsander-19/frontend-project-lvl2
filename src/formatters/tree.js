@@ -12,11 +12,11 @@ const buildValue = (obj, space) => {
 const render = (ast) => {
   const iter = (tree, space) => tree.map((node) => {
     const { status, name, children } = node;
-    const beginValue = buildValue(node.value.beginValue, space);
-    const endValue = buildValue(node.value.endValue, space);
-    const removed = `${' '.repeat(space - 2)}- ${name}: ${endValue}`;
-    const added = `${' '.repeat(space - 2)}+ ${name}: ${beginValue}`;
-    const unchanged = `${' '.repeat(space)}${name}: ${beginValue}`;
+    const newValue = buildValue(node.value.newValue, space);
+    const oldValue = buildValue(node.value.oldValue, space);
+    const removed = `${' '.repeat(space - 2)}- ${name}: ${oldValue}`;
+    const added = `${' '.repeat(space - 2)}+ ${name}: ${newValue}`;
+    const unchanged = `${' '.repeat(space)}${name}: ${newValue}`;
     switch (status) {
       case 'parent':
         return [`${' '.repeat(space)}${name}: {`, iter(children, space + 4), `${' '.repeat(space)}}`];
