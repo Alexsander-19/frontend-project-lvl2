@@ -1,5 +1,5 @@
 install: 
-	npm ci
+	npm install
 
 build:
 	rm -rf dist
