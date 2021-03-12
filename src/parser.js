@@ -6,7 +6,7 @@ const parse = (data, dataType) => {
     case 'json':
       return JSON.parse(data);
     case 'yaml':
-      return yaml.safeLoad(data);
+      return yaml.load(data);
     case 'ini':
       return ini.parse(data);
     default:
